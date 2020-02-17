@@ -3,6 +3,8 @@
 # Run Container
 docker run -d --rm -u root -it -p 1880:1880 -v ~/Documents/Projects/node-red/data:/root/data --name node-red nodered/node-red:latest-12
 
+sleep 5
+
 # Copy node-red modules to /root/data directory 
 docker exec -d -it node-red /bin/sh -c "cd /usr/src/ && cp -R /usr/src/* /root/data"
 
