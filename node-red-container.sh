@@ -1,5 +1,13 @@
 #!/bin/sh
 
+################################################################################
+# Author:   Olarn Sukasem
+#
+# Description:
+#   Files management in Node-RED container 
+#
+################################################################################
+
 # Run Container
 docker run -d --rm -u root -it -p 1880:1880 -v ~/Documents/Projects/node-red/data:/root/data --name node-red nodered/node-red:latest-12
 
