@@ -4,7 +4,7 @@
 # Author:   Olarn Sukasem
 #
 # Description:
-#   Files management in Node-RED container 
+#   Files management in Node-RED container
 #
 ################################################################################
 
