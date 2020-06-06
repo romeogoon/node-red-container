@@ -8,12 +8,15 @@
 ################################################################################
 
 container_name=node-red
+docker_images=nodered/node-red:latest-12
+MYPWD=${PWD}
+echo "${MYPWD}"
 # Check container status
 if sudo docker ps -a --format '{{.Names}}' | grep -Eq "^${container_name}\$"; then
 	echo 'This container already exists'
 else
 	# Run Container
-	docker run -d --rm -u root -it -p 1880:1880 -v ~/Documents/Projects/node-red/data:/root/data --name node-red nodered/node-red:latest-12
+	docker run -d --rm -u root -it -p 1880:1880 --device=/dev/ttyUSB0 --privileged -v "${MYPWD}"/data:/root/data --name node-red "${docker_images}"
 
 	sleep 5
 
@@ -22,8 +25,11 @@ else
 
 	sleep 5
 
+	# find "${MYPWD}"/data -type d -exec chmod 777 {} \;
+	# find "${MYPWD}"/node-red -type d -exec chmod 777 {} \;
+
 	# Move node-red modules from /data to /node-red
-	mv /root/Documents/Projects/node-red/data/* /root/Documents/Projects/node-red/
+	mv "${MYPWD}"/data/* "${MYPWD}"/
 
 	# Remove Container
 	docker rm -f node-red
@@ -31,5 +37,5 @@ else
 	sleep 3
 
 	# Run Container again
-	docker run -d --rm -u root -it -p 1880:1880 -v ~/Documents/Projects/node-red/data:/data -v ~/Documents/Projects/node-red/node-red:/usr/src/node-red/ --name node-red nodered/node-red:latest-12
+	docker run -d --rm -u root -it -p 1880:1880 --device=/dev/ttyUSB0 --privileged -v "${MYPWD}"/data:/data -v "${MYPWD}"/node-red:/usr/src/node-red/ --name node-red "${docker_images}"
 fi
