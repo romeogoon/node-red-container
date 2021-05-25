@@ -7,6 +7,10 @@
 #
 ################################################################################
 
+# Login to root then cd to directory "/home/rock/Documents/Projects/node-red"
+MYPWD=${PWD}
+echo "${MYPWD}"
+
 # Create and change permission
 docker exec -d -it node-red /bin/sh -c "mkdir /usr/src/node-red/opt && chmod 777 /usr/src/node-red/opt"
 
