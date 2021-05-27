@@ -1,0 +1,78 @@
+version: '3.8'
+services:
+  node-red:
+    image: nodered/node-red:latest-12
+    container_name: node-red
+    user: root
+    privileged: true
+    pid: "host"
+    ports:
+      - "1880:1880"
+    devices:
+      - "/dev/ttyUSB0:/dev/ttyUSB0"
+      - "/dev/ttyUSB1:/dev/ttyUSB1"
+    links:
+      - mosquitto
+      - mariadb
+    volumes:
+      - ~/Documents/Projects/Alpha/node-red/data:/data
+      - ~/Documents/Projects/Alpha/node-red/node-red:/usr/src/node-red
+      - ~/Documents/Projects/Alpha/node-red/etc/localtime:/etc/localtime:ro
+      - ~/Documents/Projects/Alpha/node-red/etc/timezone:/etc/timezone:ro
+      - /sys/devices/virtual/thermal/thermal_zone0/:/usr/src/node-re:ro
+    environment:
+      - NODE_OPTIONS=--max_old_space_size=128
+      - FLOWS=flows.json
+      - TZ=Asia/Bangkok
+    command: ["--privileged", "--pid=host"]
+    restart: unless-stopped
+
+  mosquitto:
+    image: eclipse-mosquitto:latest
+    container_name: mosquitto
+    ports:
+      - "1883:1883"
+      - "9001:9001"
+    volumes:
+      - ~/Documents/Projects/Alpha/mosquitto/data:/mosquitto/data
+      - ~/Documents/Projects/Alpha/mosquitto/log:/mosquitto/log
+      - ~/Documents/Projects/Alpha/mosquitto/config:/mosquitto/config
+      - ~/Documents/Projects/Alpha/mosquitto/passwd:/mosquitto/passwd
+    restart: unless-stopped
+
+  mariadb:
+    image: mariadb:latest
+    container_name: mariadb
+    ports:
+      - "3306:3306"
+    volumes:
+      - ~/Documents/Projects/Alpha/mariadb/datadir:/var/lib/mysql
+      - ~/Documents/Projects/Alpha/mariadb/config:/etc/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=home76
+      - TZ=Asia/Bangkok
+    restart: unless-stopped
+
+  # rabbitmq:
+  #   image: rabbitmq:management-alpine
+  #   container_name: rabbitmq
+  #   hostname: my-rabbit
+  #   volumes:
+  #     - ~/Documents/Projects/Alpha/rabbitmq/home:/var/lib/rabbitmq
+  #     - ~/Documents/Projects/Alpha/rabbitmq/home/config:/etc/rabbitmq
+  #   ports:
+  #     - 15672:15672
+  #     - 15675:15675
+  #     - 1883:1883
+
+  # mqtt:
+  # image: erlio/docker-vernemq:1.10.0
+  # container_name: vernemq1
+  # user: root
+  # ports:  
+  #   - "1883:1883"
+  # volumes:
+  #   - ~/Documents/Projects/vernemq/etc:/vernemq/etc
+  # environment:
+  #   - DOCKER_VERNEMQ_ACCEPT_EULA=yes
+  #   - DOCKER_VERNEMQ_ALLOW_ANONYMOUS=on
