@@ -7,8 +7,8 @@
 #
 ################################################################################
 
-container_name = node-red
-docker_images = nodered/node-red:latest-12
+container_name=node-red
+docker_images=nodered/node-red:latest-12
 
 # Login to root then cd to directory "/home/rock/Documents/Projects/node-red"
 MYPWD=${PWD}
